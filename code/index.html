@@ -1,0 +1,775 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fandom Hub</title>
+
+<!-- Шрифты: Outfit для заголовков, Plus Jakarta Sans для текста -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+<body>
+
+<!-- ============================ ШАПКА ============================ -->
+<header class="header">
+  <a href="#" class="brand">
+    <span>Fandom<b>Hub</b></span>
+  </a>
+
+  <!-- Строка поиска по нику или ID -->
+  <div class="search">
+    <img class="icon" src="icons/icon-search.svg" alt="">
+    <input type="text" placeholder="Поиск по нику или ID…">
+  </div>
+
+  <div class="header-actions">
+    <a href="login.html" class="btn btn-text">Войти</a>
+    <a href="register.html" class="btn btn-filled">Регистрация</a>
+
+    <!-- Каталоги с выпадающим списком при наведении -->
+    <div class="catalogs">
+      <button class="btn btn-text">
+        Каталоги
+        <img class="icon" src="icons/icon-chevron-down.svg" alt="" style="width:16px;height:16px">
+      </button>
+      <div class="catalogs-menu">
+        <a href="catalog-games.html"><span class="cat-dot" style="background:var(--c-games)"></span>Игры</a>
+        <a href="catalog-films.html"><span class="cat-dot" style="background:var(--c-films)"></span>Фильмы</a>
+        <a href="catalog-books.html"><span class="cat-dot" style="background:var(--c-books)"></span>Книги</a>
+        <a href="catalog-music.html"><span class="cat-dot" style="background:var(--c-music)"></span>Музыка</a>
+        <a href="catalog-anime.html"><span class="cat-dot" style="background:var(--c-anime)"></span>Аниме</a>
+      </div>
+    </div>
+
+    <!-- Иконка профиля -->
+    <div class="profile-wrap">
+      <button class="profile-btn profile-btn--guest" title="Профиль" id="profile-btn">
+        <img src="icons/icon-profile-empty.svg" alt="Профиль" class="profile-btn-img" id="profile-btn-img">
+      </button>
+      <div class="profile-menu" id="profile-menu" style="display:none">
+        <a href="profile.html" class="profile-menu-link">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Мой профиль
+        </a>
+        <button id="logout-btn">
+          <img class="icon" src="icons/icon-logout.svg" alt="">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ МАКЕТ ============================ -->
+<div class="layout">
+
+  <!-- Боковое меню -->
+  <aside class="sidebar">
+    <h3>Навигация</h3>
+    <button class="nav-item active" data-view="feed">
+      <img class="icon" src="icons/icon-feed.svg" alt="">
+      Лента постов
+    </button>
+    <button class="nav-item" data-view="users">
+      <img class="icon" src="icons/icon-users.svg" alt="">
+      Топ пользователей
+    </button>
+    <button class="nav-item" data-view="fandoms">
+      <img class="icon" src="icons/icon-star.svg" alt="">
+      Топ фандомов
+    </button>
+    <div class="nav-divider"></div>
+    <h3>Каталоги</h3>
+    <a href="catalog-games.html" class="nav-item"><span class="cat-dot" style="background:var(--c-games)"></span>Игры</a>
+    <a href="catalog-films.html" class="nav-item"><span class="cat-dot" style="background:var(--c-films)"></span>Фильмы</a>
+    <a href="catalog-books.html" class="nav-item"><span class="cat-dot" style="background:var(--c-books)"></span>Книги</a>
+    <a href="catalog-music.html" class="nav-item"><span class="cat-dot" style="background:var(--c-music)"></span>Музыка</a>
+    <a href="catalog-anime.html" class="nav-item"><span class="cat-dot" style="background:var(--c-anime)"></span>Аниме</a>
+  </aside>
+
+  <!-- ===================== КОНТЕНТ ===================== -->
+  <main>
+
+    <!-- ---------- ЛЕНТА ПОСТОВ ---------- -->
+    <section class="view active" id="view-feed">
+      <div class="view-head">
+        <div>
+          <h1>Лента</h1>
+          <p>Свежие посты сообщества</p>
+        </div>
+        <!-- «Плюсик» — добавить пост -->
+        <button class="add-post-btn" onclick="openModal()">
+          <img class="icon" src="icons/icon-plus.svg" alt="">
+          Добавить пост
+        </button>
+      </div>
+
+      <div class="feed">
+
+        <!-- Пост с постером аниме -->
+        <article class="post">
+          <div class="post-top">
+            <div class="avatar"><img class="avatar-overlay" src="pfp/pfp7.jpg" alt=""></div>
+            <div>
+              <div class="post-author">igor_otaku</div>
+              <div class="post-meta">2 часа назад · Аниме</div>
+            </div>
+          </div>
+          <p class="post-text">Пересматриваю в третий раз и всё равно мурашки. Лучший саундтрек сезона</p>
+          <div class="attach">
+            <div class="attach-poster">
+              <div class="poster-art"><img id="post-anime-img" src="" alt="Tongari Boushi no Atelier" style="width:80px;height:112px;border-radius:10px;object-fit:cover;box-shadow:var(--shadow-1)"></div>
+              <div class="attach-info">
+                <span class="attach-tag" style="background:var(--c-anime-soft);color:#8e44c4"><span class="cat-dot" style="background:var(--c-anime)"></span>Аниме</span>
+                <h4>Tongari Boushi no Atelier</h4>
+                <span>13 серий · 2026 · рейтинг 8.7</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Пост с музыкой -->
+        <article class="post">
+          <div class="post-top">
+            <div class="avatar"><img class="avatar-overlay" src="pfp/pfp8.jpg" alt=""></div>
+            <div>
+              <div class="post-author">midnight_mix</div>
+              <div class="post-meta">5 часов назад · Музыка</div>
+            </div>
+          </div>
+          <p class="post-text">Нашёл крутецкий трек на повторе всю неделю. Делюсь</p>
+          <div class="attach attach-music">
+            <img src="top icons/song_icon3.jpg" alt="Обложка" style="width:56px;height:56px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+            <div class="music-info">
+              <h4>Ichiko Aoba — Luciferine</h4>
+              <span>dream pop · <span id="time-display">0:00</span></span>
+              <div class="music-bar" id="music-seekbar" style="cursor:pointer">
+                <i id="music-progress" style="width:0%"></i>
+              </div>
+            </div>
+            <button class="play-btn" id="play-btn" onclick="togglePlay()">
+              <svg id="icon-play" class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="icon-pause" class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;display:none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+            </button>
+          </div>
+          <audio id="song1" src="songs/song3.mp3" preload="metadata"></audio>
+        </article>
+
+        <!-- Пост с постером фильма -->
+        <article class="post">
+          <div class="post-top">
+            <div class="avatar"><img class="avatar-overlay" src="pfp/pfp9.jpg" alt=""></div>
+            <div>
+              <div class="post-author">cinema_fox</div>
+              <div class="post-meta">вчера · Фильмы</div>
+            </div>
+          </div>
+          <p class="post-text">Тихий шедевр про одиночество в большом городе. Советую всем</p>
+          <div class="attach">
+            <div class="attach-poster">
+              <div class="poster-art"><img id="post-film-img" src="" alt="Lost in Translation" style="width:80px;height:112px;border-radius:10px;object-fit:cover;box-shadow:var(--shadow-1)"></div>
+              <div class="attach-info">
+                <span class="attach-tag" style="background:var(--c-films-soft);color:#3b6fc7"><span class="cat-dot" style="background:var(--c-films)"></span>Фильм</span>
+                <h4>Lost in translation</h4>
+                <span>драма · 1ч 41м · 2003</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Пост с игрой -->
+        <article class="post">
+          <div class="post-top">
+            <div class="avatar"><img class="avatar-overlay" src="pfp/pfp10.jpg" alt=""></div>
+            <div>
+              <div class="post-author">gamer_pixel</div>
+              <div class="post-meta">2 дня назад · Игры</div>
+            </div>
+          </div>
+          <p class="post-text">100% прохождение за 60 часов. Атмосфера затягивает с первой минуты</p>
+          <div class="attach">
+            <div class="attach-poster">
+              <div class="poster-art"><img src="icons/Silksong.jpg" alt="game1"></div>
+              <div class="attach-info">
+                <span class="attach-tag" style="background:var(--c-games-soft);color:#cc5046"><span class="cat-dot" style="background:var(--c-games)"></span>Игра</span>
+                <h4>Hollow Knight</h4>
+                <span>инди · приключение · 2025</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ---------- ТОП ПОЛЬЗОВАТЕЛЕЙ ---------- -->
+    <section class="view" id="view-users">
+      <div class="view-head">
+        <div>
+          <h1>Топ пользователей</h1>
+          <p>Самые популярные участники сообщества</p>
+        </div>
+      </div>
+      <div class="top-list">
+        <div class="top-row">
+          <div class="rank">1</div>
+          <div class="avatar"><img class="avatar-overlay" src="pfp/pfp7.jpg" alt=""></div>
+          <div><div class="name">igor_otaku</div><div class="sub">Аниме · Музыка · Манга</div></div>
+          <div class="stat"><b>48.2K</b><span>подписчиков</span></div>
+          <button class="follow-btn">Подписаться</button>
+        </div>
+        <div class="top-row">
+          <div class="rank">2</div>
+          <div class="avatar"><img class="avatar-overlay" src="pfp/pfp8.jpg" alt=""></div>
+          <div><div class="name">cinema_fox</div><div class="sub">Фильмы · Книги</div></div>
+          <div class="stat"><b>41.7K</b><span>подписчиков</span></div>
+          <button class="follow-btn">Подписаться</button>
+        </div>
+        <div class="top-row">
+          <div class="rank">3</div>
+          <div class="avatar"><img class="avatar-overlay" src="pfp/pfp9.jpg" alt=""></div>
+          <div><div class="name">midnight_mix</div><div class="sub">Музыка · Фото</div></div>
+          <div class="stat"><b>39.1K</b><span>подписчиков</span></div>
+          <button class="follow-btn">Подписаться</button>
+        </div>
+        <div class="top-row">
+          <div class="rank">4</div>
+          <div class="avatar"><img class="avatar-overlay" src="pfp/pfp10.jpg" alt=""></div>
+          <div><div class="name">gamer_pixel</div><div class="sub">Игры · Аниме</div></div>
+          <div class="stat"><b>33.5K</b><span>подписчиков</span></div>
+          <button class="follow-btn">Подписаться</button>
+        </div>
+        <div class="top-row">
+          <div class="rank">5</div>
+          <div class="avatar"><img class="avatar-overlay" src="pfp/pfp11.jpg" alt=""></div>
+          <div><div class="name">book_worm</div><div class="sub">Книги · Манга</div></div>
+          <div class="stat"><b>28.9K</b><span>подписчиков</span></div>
+          <button class="follow-btn">Подписаться</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ТОП ФАНДОМОВ ---------- -->
+    <section class="view" id="view-fandoms">
+      <div class="view-head">
+        <div>
+          <h1>Топ фандомов</h1>
+          <p>Выбери категорию, чтобы увидеть рейтинг</p>
+        </div>
+      </div>
+
+      <!-- Переключатель категорий -->
+      <div class="cat-tabs">
+        <button class="cat-tab active" data-cat="games" style="background:var(--c-games-soft)"><span class="cat-dot" style="background:var(--c-games)"></span>Игры</button>
+        <button class="cat-tab" data-cat="films"><span class="cat-dot" style="background:var(--c-films)"></span>Фильмы</button>
+        <button class="cat-tab" data-cat="books"><span class="cat-dot" style="background:var(--c-books)"></span>Книги</button>
+        <button class="cat-tab" data-cat="music"><span class="cat-dot" style="background:var(--c-music)"></span>Музыка</button>
+        <button class="cat-tab" data-cat="anime"><span class="cat-dot" style="background:var(--c-anime)"></span>Аниме</button>
+      </div>
+
+      <!-- Игры -->
+      <div class="top-list" id="cat-games">
+        <div class="top-row">
+          <div class="rank">1</div>
+          <img src="top icons/game_icon1.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Hollow Knight</div><div class="sub">инди · приключение</div></div>
+          <div class="stat"><b>120K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">2</div>
+          <img src="top icons/game_icon2.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">The Witcher 3</div><div class="sub">RPG · открытый мир</div></div>
+          <div class="stat"><b>98K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">3</div>
+          <img src="top icons/game_icon3.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Counter Strike 2</div><div class="sub">шутер · сетевая</div></div>
+          <div class="stat"><b>87K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">4</div>
+          <img src="top icons/game_icon5.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Elden Ring</div><div class="sub">souls-like · action RPG</div></div>
+          <div class="stat"><b>76K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">5</div>
+          <img src="top icons/game_icon4.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Stardew Valley</div><div class="sub">симулятор · уют</div></div>
+          <div class="stat"><b>54K</b><span>участников</span></div>
+        </div>
+      </div>
+
+      <!-- Фильмы -->
+      <div class="top-list" id="cat-films" style="display:none">
+        <div class="top-row">
+          <div class="rank">1</div>
+          <img src="posters/films/poster1.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Интерстеллар</div><div class="sub">фантастика · драма</div></div>
+          <div class="stat"><b>198K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">2</div>
+          <img src="posters/films/poster2.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Побег из Шоушенка</div><div class="sub">драма · классика</div></div>
+          <div class="stat"><b>187K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">3</div>
+          <img src="posters/films/poster3.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Криминальное чтиво</div><div class="sub">криминал · драма</div></div>
+          <div class="stat"><b>174K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">4</div>
+          <img src="posters/films/poster4.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Одержимость</div><div class="sub">драма · музыкальная</div></div>
+          <div class="stat"><b>156K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">5</div>
+          <img src="posters/films/poster5.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Бойцовский клуб</div><div class="sub">триллер · драма</div></div>
+          <div class="stat"><b>145K</b><span>участников</span></div>
+        </div>
+      </div>
+
+      <!-- Книги -->
+      <div class="top-list" id="cat-books" style="display:none">
+        <div class="top-row">
+          <div class="rank">1</div>
+          <img src="posters/books/poster1.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Гарри Поттер</div><div class="sub">фэнтези · приключение</div></div>
+          <div class="stat"><b>412K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">2</div>
+          <img src="posters/books/poster2.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Дюна</div><div class="sub">фантастика · эпос</div></div>
+          <div class="stat"><b>189K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">3</div>
+          <img src="posters/books/poster3.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Мастер и Маргарита</div><div class="sub">классика · мистика</div></div>
+          <div class="stat"><b>167K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">4</div>
+          <img src="posters/books/poster4.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Маленький принц</div><div class="sub">притча · философия</div></div>
+          <div class="stat"><b>134K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">5</div>
+          <img src="posters/books/poster5.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">1984</div><div class="sub">антиутопия · классика</div></div>
+          <div class="stat"><b>143K</b><span>участников</span></div>
+        </div>
+      </div>
+
+      <!-- Музыка -->
+      <div class="top-list" id="cat-music" style="display:none">
+        <div class="top-row">
+          <div class="rank">1</div>
+          <img src="top icons/song_icon1.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">King Crimson — Starless</div><div class="sub">прог-рок · арт-рок</div></div>
+          <div class="stat"><b>95K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">2</div>
+          <img src="top icons/song_icon2.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">David Bowie — Heroes</div><div class="sub">глэм-рок · new wave</div></div>
+          <div class="stat"><b>87K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">3</div>
+          <img src="top icons/song_icon3.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Ichiko Aoba — Luciferine</div><div class="sub">dream pop</div></div>
+          <div class="stat"><b>79K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">4</div>
+          <img src="top icons/song_icon4.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">Michael Jackson — Billie Jean</div><div class="sub">поп · R&B</div></div>
+          <div class="stat"><b>71K</b><span>участников</span></div>
+        </div>
+        <div class="top-row">
+          <div class="rank">5</div>
+          <img src="top icons/song_icon5.jpg" alt="" style="width:46px;height:46px;border-radius:var(--r-sm);object-fit:cover;flex-shrink:0;">
+          <div><div class="name">my bloody Valentine — When You Sleep</div><div class="sub">shoegaze</div></div>
+          <div class="stat"><b>63K</b><span>участников</span></div>
+        </div>
+      </div>
+
+      <!-- Аниме -->
+      <div class="top-list" id="cat-anime" style="display:none">
+        <p class="top-loading">Загрузка…</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===================== МОДАЛЬНОЕ ОКНО ===================== -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2>Новый пост</h2>
+    <p class="sub">Поделись интересом с сообществом</p>
+
+    <div class="field">
+      <label>Подпись (по желанию)</label>
+      <textarea rows="3" placeholder="Что хочешь рассказать?"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Прикрепить интерес</label>
+      <div class="attach-chips">
+        <button class="chip"><span class="cat-dot" style="background:var(--c-games)"></span>Игра</button>
+        <button class="chip"><span class="cat-dot" style="background:var(--c-films)"></span>Фильм</button>
+        <button class="chip"><span class="cat-dot" style="background:var(--c-books)"></span>Книга</button>
+        <button class="chip"><span class="cat-dot" style="background:var(--c-music)"></span>Музыка</button>
+        <button class="chip"><span class="cat-dot" style="background:var(--c-anime)"></span>Аниме</button>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal()">Отмена</button>
+      <button class="add-post-btn" onclick="closeModal()" style="box-shadow:var(--shadow-1)">Опубликовать</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== МИНИМАЛЬНЫЙ JS ===================== -->
+<script>
+  /* Авторизация */
+  (function(){
+    var loggedIn    = localStorage.getItem('fh_logged_in');
+    var loginBtn    = document.querySelector('a[href="login.html"]');
+    var registerBtn = document.querySelector('a[href="register.html"]');
+    var profileBtn  = document.getElementById('profile-btn');
+    var profileImg  = document.getElementById('profile-btn-img');
+    var profileMenu = document.getElementById('profile-menu');
+
+    function setLoggedIn() {
+      if (loginBtn)    loginBtn.style.display    = 'none';
+      if (registerBtn) registerBtn.style.display = 'none';
+      if (profileMenu) profileMenu.style.display = '';
+      profileBtn.classList.remove('profile-btn--guest');
+      profileImg.src = 'pfp.jpg';
+    }
+
+    function setLoggedOut() {
+      if (loginBtn)    loginBtn.style.display    = '';
+      if (registerBtn) registerBtn.style.display = '';
+      if (profileMenu) profileMenu.style.display = 'none';
+      profileBtn.classList.add('profile-btn--guest');
+      profileImg.src = 'icons/icon-profile-empty.svg';
+    }
+
+    if (loggedIn) {
+      setLoggedIn();
+      document.getElementById('logout-btn').addEventListener('click', function() {
+        localStorage.removeItem('fh_logged_in');
+        setLoggedOut();
+      });
+    } else {
+      profileBtn.addEventListener('click', function() {
+        window.location.href = 'login.html';
+      });
+    }
+  })();
+
+  /* Переключение разделов в боковом меню */
+  const navItems = document.querySelectorAll('.nav-item[data-view]');
+  const views = document.querySelectorAll('.view');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
+      const target = item.dataset.view;
+      views.forEach(v => v.classList.toggle('active', v.id === 'view-' + target));
+    });
+  });
+
+  /* Переключение категорий в «Топ фандомов» */
+  var catSoftColors = { games:'var(--c-games-soft)', films:'var(--c-films-soft)', books:'var(--c-books-soft)', music:'var(--c-music-soft)', anime:'var(--c-anime-soft)' };
+  document.querySelectorAll('.cat-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.cat-tab').forEach(function(t) {
+        t.classList.remove('active');
+        t.style.background = '';
+      });
+      tab.classList.add('active');
+      var cat = tab.dataset.cat;
+      tab.style.background = catSoftColors[cat] || '';
+      ['games','films','books','music','anime'].forEach(function(c) {
+        var el = document.getElementById('cat-' + c);
+        if (el) el.style.display = (c === cat) ? '' : 'none';
+      });
+    });
+  });
+
+  /* Музыкальный плеер */
+  const audio = document.getElementById('song1');
+  const iconPlay = document.getElementById('icon-play');
+  const iconPause = document.getElementById('icon-pause');
+  const progressBar = document.getElementById('music-progress');
+  const timeDisplay = document.getElementById('time-display');
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play();
+      iconPlay.style.display = 'none';
+      iconPause.style.display = '';
+    } else {
+      audio.pause();
+      iconPlay.style.display = '';
+      iconPause.style.display = 'none';
+    }
+  }
+
+  document.getElementById('music-seekbar').addEventListener('click', function(e) {
+    const rect = this.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      const m = Math.floor(audio.currentTime / 60);
+      const s = String(Math.floor(audio.currentTime % 60)).padStart(2, '0');
+      timeDisplay.textContent = m + ':' + s;
+    }
+  });
+
+  audio.addEventListener('ended', () => {
+    iconPlay.style.display = '';
+    iconPause.style.display = 'none';
+    progressBar.style.width = '0%';
+    timeDisplay.textContent = '0:00';
+  });
+
+  /* Постеры в карточках ленты — загружаем из API */
+  // Аниме-пост: ищем "Tongari Boushi no Atelier" через Jikan
+  fetch('https://api.jikan.moe/v4/anime?q=Tongari+Boushi+no+Atelier&limit=1&sfw=true')
+    .then(r => r.json())
+    .then(d => {
+      const img = document.getElementById('post-anime-img');
+      if (img && d.data?.[0]) img.src = d.data[0].images.jpg.large_image_url || d.data[0].images.jpg.image_url;
+    })
+    .catch(() => {});
+
+  // Фильм-пост: загружаем "Lost in Translation" по TMDB ID 153
+  fetch('https://api.themoviedb.org/3/movie/153?api_key=1af27180c055a2bfd3ba2109a04c1843')
+    .then(r => r.json())
+    .then(d => {
+      const img = document.getElementById('post-film-img');
+      if (img && d.poster_path) img.src = 'https://image.tmdb.org/t/p/w185' + d.poster_path;
+    })
+    .catch(() => {});
+
+  /* Модальное окно добавления поста */
+  function openModal(){ document.getElementById('modal').classList.add('open'); }
+  function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+  /* Топ аниме — Jikan API */
+  (function () {
+    const list = document.getElementById('cat-anime');
+    let loaded = false;
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function fmt(n) {
+      if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+      if (n >= 1_000)     return Math.round(n / 1_000) + 'K';
+      return n;
+    }
+
+    async function loadAnimeTop() {
+      if (loaded) return;
+      loaded = true;
+      try {
+        const res  = await fetch('https://api.jikan.moe/v4/top/anime?type=tv&limit=5');
+        const data = (await res.json()).data || [];
+        list.innerHTML = data.map((a, i) => {
+          const title   = esc(a.title_english || a.title);
+          const genres  = (a.genres || []).slice(0, 2).map(g => g.name).join(' · ') || '—';
+          const score   = a.score ? a.score.toFixed(1) : '—';
+          const img     = a.images?.jpg?.image_url || '';
+          return `
+            <div class="top-row">
+              <div class="rank">${i + 1}</div>
+              <img src="${img}" alt="" style="width:46px;height:46px;object-fit:cover;flex-shrink:0;border-radius:8px">
+              <div><div class="name">${title}</div><div class="sub">${esc(genres)}</div></div>
+              <div class="stat"><b>${score}</b><span>из 10</span></div>
+            </div>`;
+        }).join('');
+      } catch {
+        list.innerHTML = '<p class="top-loading">Не удалось загрузить</p>';
+        loaded = false;
+      }
+    }
+
+    /* Загружаем при первом показе вкладки «Аниме» */
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (tab.dataset.cat === 'anime') loadAnimeTop();
+      });
+    });
+  })();
+
+  /* Топ фильмов — TMDB API */
+  (function () {
+    const TMDB_KEY = '1af27180c055a2bfd3ba2109a04c1843';
+    const IMG_S    = 'https://image.tmdb.org/t/p/w92';
+    const GENRES   = {
+      28:'Боевик', 12:'Приключения', 16:'Анимация', 35:'Комедия',
+      80:'Криминал', 99:'Документальный', 18:'Драма', 10751:'Семейный',
+      14:'Фэнтези', 36:'История', 27:'Ужасы', 10402:'Музыка',
+      9648:'Детектив', 10749:'Мелодрама', 878:'Фантастика',
+      53:'Триллер', 10752:'Военный', 37:'Вестерн'
+    };
+    const list = document.getElementById('cat-films');
+    let loaded = false;
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function fmt(n) {
+      if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+      if (n >= 1_000)     return Math.round(n / 1_000) + 'K';
+      return n;
+    }
+
+    async function loadFilmsTop() {
+      if (loaded) return;
+      loaded = true;
+      try {
+        const res  = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${TMDB_KEY}&language=ru-RU`);
+        const data = (await res.json()).results || [];
+        list.innerHTML = data.slice(0, 5).map((m, i) => {
+          const title  = esc(m.title || m.original_title);
+          const genres = (m.genre_ids || []).slice(0, 2).map(id => GENRES[id]).filter(Boolean).join(' · ') || '—';
+          const year   = m.release_date ? m.release_date.slice(0, 4) : '';
+          const rating = m.vote_average ? m.vote_average.toFixed(1) : '—';
+          const img    = m.poster_path ? IMG_S + m.poster_path : '';
+          return `
+            <div class="top-row">
+              <div class="rank">${i + 1}</div>
+              <img src="${img}" alt="" style="object-fit:cover;flex-shrink:0;border-radius:8px">
+              <div><div class="name">${title}</div><div class="sub">${esc(genres)}${year ? ' · ' + year : ''}</div></div>
+              <div class="stat"><b>${rating}</b><span>из 10</span></div>
+            </div>`;
+        }).join('');
+      } catch {
+        list.innerHTML = '<p class="top-loading">Не удалось загрузить</p>';
+        loaded = false;
+      }
+    }
+
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (tab.dataset.cat === 'films') loadFilmsTop();
+      });
+    });
+  })();
+
+  /* Топ игр — RAWG API */
+  (function () {
+    const RAWG_KEY = 'cc2db0f41f074256bb976f07cb70a78b';
+    const list = document.getElementById('cat-games');
+    let loaded = false;
+
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmt(n) {
+      if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+      if (n >= 1_000)     return Math.round(n / 1_000) + 'K';
+      return n;
+    }
+
+    async function loadGamesTop() {
+      if (loaded) return;
+      loaded = true;
+      try {
+        const res  = await fetch(`https://api.rawg.io/api/games?key=${RAWG_KEY}&ordering=-added&page_size=5`);
+        const data = (await res.json()).results || [];
+        list.innerHTML = data.map((g, i) => {
+          const title  = esc(g.name);
+          const genres = (g.genres || []).slice(0, 2).map(x => x.name).join(' · ') || '—';
+          const score  = g.rating ? (g.rating * 2).toFixed(1) : '—';
+          const img    = g.background_image || '';
+          return `
+            <div class="top-row">
+              <div class="rank">${i + 1}</div>
+              <img src="${img}" alt="" style="width:46px;height:46px;object-fit:cover;flex-shrink:0;border-radius:8px">
+              <div><div class="name">${title}</div><div class="sub">${esc(genres)}</div></div>
+              <div class="stat"><b>${score}</b><span>из 10</span></div>
+            </div>`;
+        }).join('');
+      } catch {
+        list.innerHTML = '<p class="top-loading">Не удалось загрузить</p>';
+        loaded = false;
+      }
+    }
+
+    /* Игры — вкладка по умолчанию, грузим сразу */
+    loadGamesTop();
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => { if (tab.dataset.cat === 'games') loadGamesTop(); });
+    });
+  })();
+
+  /* Топ книг — Open Library API */
+  (function () {
+    const OL   = 'https://openlibrary.org';
+    const OLCO = 'https://covers.openlibrary.org/b/id';
+    const list = document.getElementById('cat-books');
+    let loaded = false;
+
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    async function loadBooksTop() {
+      if (loaded) return;
+      loaded = true;
+      try {
+        const fields = 'key,title,author_name,cover_i,first_publish_year,ratings_average';
+        const res  = await fetch(`${OL}/search.json?subject=fiction&sort=rating&limit=10&fields=${fields}`);
+        const docs = (await res.json()).docs || [];
+        /* Берём первые 5 книг с обложкой */
+        const top5 = docs.filter(b => b.cover_i).slice(0, 5);
+        list.innerHTML = top5.map((b, i) => {
+          const title = esc(b.title || '—');
+          const sub   = esc((b.author_name || [])[0] || '—');
+          const img   = `${OLCO}/${b.cover_i}-S.jpg`;
+          const score = b.ratings_average ? (+b.ratings_average * 2).toFixed(1) : '—';
+          return `
+            <div class="top-row">
+              <div class="rank">${i + 1}</div>
+              <img src="${img}" alt="" style="object-fit:cover;flex-shrink:0;border-radius:8px">
+              <div><div class="name">${title}</div><div class="sub">${sub}</div></div>
+              <div class="stat"><b>${score}</b><span>из 10</span></div>
+            </div>`;
+        }).join('');
+      } catch {
+        list.innerHTML = '<p class="top-loading">Не удалось загрузить</p>';
+        loaded = false;
+      }
+    }
+
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => { if (tab.dataset.cat === 'books') loadBooksTop(); });
+    });
+  })();
+</script>
+
+</body>
+</html>

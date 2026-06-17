@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрация — FandomHub</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="auth">
+
+<header class="header">
+  <a href="index.html" class="brand">
+    <span>Fandom<b>Hub</b></span>
+  </a>
+</header>
+
+<main class="page">
+  <div class="card">
+    <div class="card-icon">
+      <img src="icons/icon-user-plus.svg" alt="">
+    </div>
+    <h1>Создать аккаунт</h1>
+    <p class="subtitle">Присоединяйся к сообществу FandomHub</p>
+
+    <form id="reg-form">
+      <div class="field-pair">
+        <div class="field">
+          <label for="reg-name">Имя</label>
+          <input type="text" id="reg-name" placeholder="Алекс" autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label for="reg-surname">Фамилия</label>
+          <input type="text" id="reg-surname" placeholder="Иванов" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="reg-nick">Ник</label>
+        <input type="text" id="reg-nick" placeholder="cool_user42" autocomplete="username">
+        <p class="hint">Только латиница, цифры и _</p>
+      </div>
+
+      <div class="field">
+        <label for="reg-email">Электронная почта</label>
+        <input type="email" id="reg-email" placeholder="user@example.com" autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label for="reg-pass">Пароль</label>
+        <input type="password" id="reg-pass" placeholder="Минимум 8 символов" autocomplete="new-password">
+      </div>
+
+      <div class="field">
+        <label for="reg-pass2">Повторите пароль</label>
+        <input type="password" id="reg-pass2" placeholder="••••••••" autocomplete="new-password">
+        <p class="hint" id="pass-hint"></p>
+      </div>
+
+      <button class="btn-submit">
+        Зарегистрироваться
+        <img src="icons/icon-arrow-right.svg" alt="">
+      </button>
+    </form>
+
+    <p class="agreement">
+      Нажимая «Зарегистрироваться», вы соглашаетесь<br>
+      с <a href="#">Условиями использования</a> и <a href="#">Политикой конфиденциальности</a>
+    </p>
+
+    <div class="divider">или</div>
+
+    <p class="switch-link">
+      Уже есть аккаунт? <a href="login.html">Войти</a>
+    </p>
+  </div>
+</main>
+
+<script>
+  document.getElementById('reg-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var nick  = document.getElementById('reg-nick').value.trim();
+    var email = document.getElementById('reg-email').value.trim();
+    var pass  = document.getElementById('reg-pass').value;
+    var pass2 = document.getElementById('reg-pass2').value;
+    if (!nick || !email || !pass || !pass2) return;
+    if (pass !== pass2) return;
+    localStorage.setItem('fh_logged_in', '1');
+    window.location.href = 'index.html';
+  });
+
+  var p1   = document.getElementById('reg-pass');
+  var p2   = document.getElementById('reg-pass2');
+  var hint = document.getElementById('pass-hint');
+  function checkPass() {
+    if (!p2.value) { hint.textContent = ''; p2.style.borderColor = ''; return; }
+    var match = p1.value === p2.value;
+    hint.textContent  = match ? 'Пароли совпадают'    : 'Пароли не совпадают';
+    hint.style.color  = match ? '#4FB3A8'             : '#F28B82';
+    p2.style.borderColor = match ? '#4FB3A8'          : '#F28B82';
+  }
+  p1.addEventListener('input', checkPass);
+  p2.addEventListener('input', checkPass);
+</script>
+</body>
+</html>

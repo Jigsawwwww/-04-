@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Фильмы — FandomHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="cat-films">
+
+<header class="header">
+  <a href="index.html" class="brand"><span>Fandom<b>Hub</b></span></a>
+  <a href="index.html" class="back-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    Главная
+  </a>
+</header>
+
+<main class="page">
+  <div class="cat-head">
+    <div>
+      <span class="cat-label"><span class="cat-dot"></span>Фильмы</span>
+      <h1>Каталог фандомов</h1>
+      <p>Топ фильмов с TMDB · поиск в реальном времени</p>
+    </div>
+    <a href="index.html" class="back-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      На главную
+    </a>
+  </div>
+
+  <div class="search-wrap">
+    <img src="icons/icon-search.svg" alt="">
+    <input type="text" id="search" placeholder="Поиск фильма…" autocomplete="off">
+  </div>
+
+  <div class="cards-grid" id="grid">
+  </div>
+  <p class="no-results" id="no-results">Ничего не найдено</p>
+</main>
+
+<script>
+  // API-ключ TMDB — получен при регистрации на themoviedb.org
+  const TMDB_KEY = '1af27180c055a2bfd3ba2109a04c1843';
+  // Базовый URL TMDB API v3
+  const TMDB     = 'https://api.themoviedb.org/3';
+  // Базовый URL для постеров. Путь из API (poster_path) добавляется в конец.
+  // w500 — ширина изображения в пикселях; TMDB поддерживает w92, w185, w342, w500, w780, original
+  const IMG      = 'https://image.tmdb.org/t/p/w500';
+
+  // Словарь жанров: числовой ID из API → русское название.
+  // TMDB возвращает только ID жанра, а не его название, поэтому расшифровываем вручную.
+  const GENRES   = {
+    28:'Боевик', 12:'Приключения', 16:'Анимация', 35:'Комедия',
+    80:'Криминал', 99:'Документальный', 18:'Драма', 10751:'Семейный',
+    14:'Фэнтези', 36:'История', 27:'Ужасы', 10402:'Музыка',
+    9648:'Детектив', 10749:'Мелодрама', 878:'Фантастика',
+    53:'Триллер', 10752:'Военный', 37:'Вестерн'
+  };
+
+  // Ссылки на DOM-элементы, с которыми работаем
+  const grid  = document.getElementById('grid');       // сетка карточек
+  const noRes = document.getElementById('no-results'); // надпись «ничего не найдено»
+  const inp   = document.getElementById('search');     // поле поиска
+
+  // Таймер дебаунса — нужен, чтобы не слать запрос на каждую набранную букву
+  let searchTimer;
+
+  // Форматирует большое число в читаемый вид: 1 500 000 → "1.5M", 287 000 → "287K"
+  function fmt(n) {
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+    if (n >= 1_000)     return Math.round(n / 1_000) + 'K';
+    return n;
+  }
+
+  // Экранирует спецсимволы HTML, чтобы данные из API не сломали вёрстку
+  // Пример: символ < превращается в &lt; и браузер показывает его как текст, а не тег
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Принимает массив объектов фильмов из API и отрисовывает карточки в сетке.
+  // Если массив пустой — прячет сетку и показывает надпись «ничего не найдено».
+  function renderCards(items) {
+    noRes.style.display = 'none';
+    if (!items.length) { grid.innerHTML = ''; noRes.style.display = ''; return; }
+    grid.innerHTML = items.map(m => {
+      // TMDB возвращает title на языке запроса (ru-RU), original_title — всегда оригинал
+      const title  = esc(m.title || m.original_title);
+      // Собираем полный URL постера; если постера нет — оставляем пустую строку
+      const image  = m.poster_path ? IMG + m.poster_path : '';
+      // Берём первые два ID жанра, переводим в русские названия, соединяем через точку
+      const genres = (m.genre_ids || []).slice(0, 2).map(id => GENRES[id]).filter(Boolean).join(' · ') || '—';
+      // release_date имеет формат "YYYY-MM-DD" — берём только год (первые 4 символа)
+      const year   = m.release_date ? m.release_date.slice(0, 4) : '';
+      const votes  = fmt(m.vote_count || 0);
+      // toFixed(1) оставляет одну цифру после запятой: 8.712 → "8.7"
+      const score  = m.vote_average ? '★ ' + m.vote_average.toFixed(1) : '';
+      // Прямая ссылка на страницу фильма на TMDB
+      const url    = `https://www.themoviedb.org/movie/${m.id}`;
+      return `
+        <a href="${url}" target="_blank" rel="noopener" class="fandom-card">
+          <div class="card-poster"><img src="${image}" alt="${title}" loading="lazy"></div>
+          <div class="card-body">
+            <div class="card-name" title="${title}">${title}</div>
+            <div class="card-genre">${esc(genres)}${year ? ' · ' + year : ''}</div>
+            <div class="card-footer">
+              <span class="card-members">${votes} оценок</span>
+              <span class="join-btn">${score}</span>
+            </div>
+          </div>
+        </a>`;
+    }).join('');
+  }
+
+  // Заменяет содержимое сетки анимацией загрузки (CSS-спиннер)
+  function showSpinner() {
+    grid.innerHTML = '<div class="grid-spinner"></div>';
+    noRes.style.display = 'none';
+  }
+
+  // Основная функция загрузки данных.
+  // Если передана строка query — ищет фильмы по названию.
+  // Если query пустой — загружает топ фильмов по рейтингу.
+  async function load(query) {
+    showSpinner();
+    try {
+      const url = query
+        ? `${TMDB}/search/movie?api_key=${TMDB_KEY}&language=ru-RU&query=${encodeURIComponent(query)}&include_adult=false`
+        : `${TMDB}/movie/top_rated?api_key=${TMDB_KEY}&language=ru-RU`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status); // если сервер вернул ошибку — идём в catch
+      // У TMDB результаты лежат в поле results (в отличие от Jikan, где поле data)
+      renderCards((await res.json()).results || []);
+    } catch {
+      grid.innerHTML = '<p class="grid-message">Не удалось загрузить данные. Попробуй позже.</p>';
+    }
+  }
+
+  // Слушаем ввод в поле поиска.
+  // Сбрасываем предыдущий таймер и ставим новый на 500 мс —
+  // это дебаунс: запрос уйдёт только когда пользователь перестанет печатать.
+  inp.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => load(this.value.trim()), 500);
+  });
+
+  // Сразу при открытии страницы загружаем топ фильмов
+  load();
+</script>
+</body>
+</html>

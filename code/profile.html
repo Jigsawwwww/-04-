@@ -1,0 +1,451 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Профиль — FandomHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="brand"><span>Fandom<b>Hub</b></span></a>
+  <a href="index.html" class="back-btn">
+    <img src="icons/icon-back.svg" width="18" height="18" alt="">
+    Главная
+  </a>
+</header>
+
+<div class="profile-layout">
+
+  <!-- =================== ОСНОВНОЙ КОНТЕНТ =================== -->
+  <div class="profile-main">
+
+    <!-- Профиль-карточка -->
+    <div class="profile-card">
+      <img class="profile-avatar" src="pfp.jpg" alt="Аватар пользователя" id="profile-avatar-img">
+      <div class="profile-info">
+        <div class="profile-nick-row">
+          <h1 class="profile-nick" id="profile-nick-text">igor</h1>
+          <span class="profile-badge">Участник</span>
+        </div>
+        <p class="profile-meta" id="profile-meta-text">На FandomHub с 2023 года</p>
+        <div class="profile-stats">
+          <div class="profile-stat"><b>47</b><span>постов</span></div>
+          <div class="profile-stat"><b>12</b><span>друзей</span></div>
+          <div class="profile-stat"><b>8</b><span>фандомов</span></div>
+        </div>
+        <a href="edit-profile.html" class="profile-edit-btn">
+          <img src="icons/icon-edit.svg" width="15" height="15" alt="">
+          Редактировать профиль
+        </a>
+      </div>
+    </div>
+
+    <!-- Любимый трек -->
+    <div class="profile-section">
+      <h2 class="section-title">
+        <img src="icons/icon-music-note.svg" width="17" height="17" alt="">
+        Любимый трек
+      </h2>
+      <div class="music-card">
+        <div class="music-player">
+          <img class="track-cover" id="fav-track-cover" src="top icons/song_icon1.jpg" alt="Starless">
+          <div class="track-info">
+            <div class="track-name" id="fav-track-name">King Crimson — Starless</div>
+            <div class="track-meta"><span id="fav-track-genre">прог-рок · арт-рок</span> · <span class="time-display">0:00</span></div>
+            <div class="music-seekbar"><div class="music-bar-inner"></div></div>
+          </div>
+          <button class="play-btn">
+            <img class="icon-play" src="icons/icon-play.svg" width="20" height="20" alt="Играть">
+            <img class="icon-pause" src="icons/icon-pause.svg" width="20" height="20" alt="Пауза" style="display:none">
+          </button>
+          <audio id="fav-track-audio" src="songs/song1.mp3" preload="metadata"></audio>
+        </div>
+      </div>
+    </div>
+
+    <!-- О себе -->
+    <div class="profile-section">
+      <h2 class="section-title">
+        <img src="icons/icon-info.svg" width="17" height="17" alt="">
+        О себе
+      </h2>
+      <p class="about-text" id="profile-bio-text">Я ИГОРЬ ЧЕРЕПАНОВ ВСЕМ ПРИВЕТ</p>
+    </div>
+
+    <!-- Любимые фандомы -->
+    <div class="profile-section">
+      <h2 class="section-title">
+        <img src="icons/icon-star-accent.svg" width="17" height="17" alt="">
+        Любимые фандомы
+      </h2>
+      <div class="profile-fandoms" id="profile-fandoms-grid">
+
+        <a href="catalog-anime.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img id="pin-frieren" src="" alt="Фрирен">
+            <span class="fandom-pin-cat" style="background:var(--c-anime)">Аниме</span>
+          </div>
+          <span class="fandom-pin-name">Фрирен</span>
+        </a>
+
+        <a href="catalog-anime.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img id="pin-steins" src="" alt="Steins;Gate">
+            <span class="fandom-pin-cat" style="background:var(--c-anime)">Аниме</span>
+          </div>
+          <span class="fandom-pin-name">Steins;Gate</span>
+        </a>
+
+        <a href="catalog-anime.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img id="pin-eva" src="" alt="Evangelion">
+            <span class="fandom-pin-cat" style="background:var(--c-anime)">Аниме</span>
+          </div>
+          <span class="fandom-pin-name">Evangelion</span>
+        </a>
+
+        <a href="catalog-films.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img id="pin-lahaine" src="" alt="Ненависть">
+            <span class="fandom-pin-cat" style="background:var(--c-films)">Фильмы</span>
+          </div>
+          <span class="fandom-pin-name">Ненависть</span>
+        </a>
+
+        <a href="catalog-games.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img id="pin-hk" src="" alt="Hollow Knight">
+            <span class="fandom-pin-cat" style="background:var(--c-games)">Игры</span>
+          </div>
+          <span class="fandom-pin-name">Hollow Knight</span>
+        </a>
+
+        <a href="catalog-games.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img id="pin-er" src="" alt="Elden Ring">
+            <span class="fandom-pin-cat" style="background:var(--c-games)">Игры</span>
+          </div>
+          <span class="fandom-pin-name">Elden Ring</span>
+        </a>
+
+      </div>
+    </div>
+
+  </div><!-- /profile-main -->
+
+  <!-- =================== САЙДБАР: ДРУЗЬЯ =================== -->
+  <aside class="profile-sidebar">
+    <div class="profile-section">
+      <h2 class="section-title">
+        <img src="icons/icon-users-accent.svg" width="17" height="17" alt="">
+        Друзья <span class="friends-count">12</span>
+      </h2>
+      <div class="friends-list">
+
+        <a href="profile.html" class="friend-item">
+          <div class="friend-avatar"><img class="avatar-overlay" src="pfp/pfp1.jpg" alt=""></div>
+          <div>
+            <div class="friend-name">fio</div>
+            <div class="friend-sub">Онлайн</div>
+          </div>
+        </a>
+
+        <a href="profile.html" class="friend-item">
+          <div class="friend-avatar"><img class="avatar-overlay" src="pfp/pfp2.jpg" alt=""></div>
+          <div>
+            <div class="friend-name">pro100tanya</div>
+            <div class="friend-sub">1 час назад</div>
+          </div>
+        </a>
+
+        <a href="profile.html" class="friend-item">
+          <div class="friend-avatar"><img class="avatar-overlay" src="pfp/pfp3.jpg" alt=""></div>
+          <div>
+            <div class="friend-name">Danon97</div>
+            <div class="friend-sub">3 часа назад</div>
+          </div>
+        </a>
+
+        <a href="profile.html" class="friend-item">
+          <div class="friend-avatar"><img class="avatar-overlay" src="pfp/pfp4.jpg" alt=""></div>
+          <div>
+            <div class="friend-name">fedot</div>
+            <div class="friend-sub">Вчера</div>
+          </div>
+        </a>
+
+        <a href="profile.html" class="friend-item">
+          <div class="friend-avatar"><img class="avatar-overlay" src="pfp/pfp5.jpg" alt=""></div>
+          <div>
+            <div class="friend-name">yuri_loza</div>
+            <div class="friend-sub">2 дня назад</div>
+          </div>
+        </a>
+
+        <a href="profile.html" class="friend-item">
+          <div class="friend-avatar"><img class="avatar-overlay" src="pfp/pfp6.jpg" alt=""></div>
+          <div>
+            <div class="friend-name">OniSchuk</div>
+            <div class="friend-sub">3 дня назад</div>
+          </div>
+        </a>
+
+      </div>
+      <button class="friends-show-all">Все друзья →</button>
+    </div>
+  </aside>
+
+</div><!-- /profile-layout -->
+
+<!-- =================== КОММЕНТАРИИ =================== -->
+<section class="comments-section">
+  <div class="comments-inner">
+
+    <h2 class="section-title" style="margin-bottom:20px">
+      <img src="icons/icon-chat.svg" width="17" height="17" alt="">
+      Комментарии
+    </h2>
+
+    <div class="comment-form">
+      <div class="avatar" style="width:40px;height:40px;flex-shrink:0" id="comment-my-avatar"><img class="avatar-overlay" src="pfp.jpg" alt=""></div>
+      <div class="comment-input-wrap">
+        <input type="text" class="comment-input" placeholder="Написать комментарий…" id="comment-input">
+        <button class="comment-submit" onclick="addComment()">Отправить</button>
+      </div>
+    </div>
+
+    <div class="comments-list" id="comments-list">
+
+      <div class="comment">
+        <div class="avatar" style="width:40px;height:40px;flex-shrink:0"><img class="avatar-overlay" src="pfp/pfp3.jpg" alt=""></div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">Danon97</span>
+            <span class="comment-time">2 часа назад</span>
+          </div>
+          <p class="comment-text">ОБОЖЕ ТЫ ТАКОЙ КРУТОЙ</p>
+        </div>
+      </div>
+
+      <div class="comment">
+        <div class="avatar" style="width:40px;height:40px;flex-shrink:0"><img class="avatar-overlay" src="pfp/pfp6.jpg" alt=""></div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">OniSchuk</span>
+            <span class="comment-time">5 часов назад</span>
+          </div>
+          <p class="comment-text">братан, посмотри зеленый слоник - понравится.</p>
+        </div>
+      </div>
+
+      <div class="comment">
+        <div class="avatar" style="width:40px;height:40px;flex-shrink:0"><img class="avatar-overlay" src="pfp/pfp2.jpg" alt=""></div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">pro100tanya</span>
+            <span class="comment-time">Вчера</span>
+          </div>
+          <p class="comment-text">Игорек черепанек мой любимка</p>
+        </div>
+      </div>
+
+      <div class="comment">
+        <div class="avatar" style="width:40px;height:40px;flex-shrink:0"><img class="avatar-overlay" src="pfp/pfp5.jpg" alt=""></div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">yuri_loza</span>
+            <span class="comment-time">2 дня назад</span>
+          </div>
+          <p class="comment-text">румерок спок.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<script>
+  /* ---- Загрузка профиля из localStorage ---- */
+  (function() {
+    const ACCENTS = [
+      { primary: '#A5B4FC', soft: '#1E2260', on: '#12154E' },
+      { primary: '#F9A8D4', soft: '#42103A', on: '#3A0828' },
+      { primary: '#7DD3FC', soft: '#0A2040', on: '#061830' },
+      { primary: '#86EFAC', soft: '#0B2618', on: '#04200E' },
+      { primary: '#FCA05A', soft: '#38200A', on: '#2A1200' },
+      { primary: '#F4A09A', soft: '#38100E', on: '#2A0806' },
+      { primary: '#5EEAD4', soft: '#04281E', on: '#011610' },
+      { primary: '#FCD34D', soft: '#352400', on: '#281800' },
+    ];
+    const TRACKS = [
+      { name: 'King Crimson — Starless',               genre: 'прог-рок · арт-рок',  img: 'top icons/song_icon1.jpg', src: 'songs/song1.mp3' },
+      { name: 'David Bowie — Heroes',                  genre: 'глэм-рок · new wave', img: 'top icons/song_icon2.jpg', src: 'songs/song2.mp3' },
+      { name: 'Ichiko Aoba — Luciferine',              genre: 'dream pop · ambient', img: 'top icons/song_icon3.jpg', src: 'songs/song3.mp3' },
+      { name: 'Michael Jackson — Billie Jean',         genre: 'поп · R&B',           img: 'top icons/song_icon4.jpg', src: 'songs/song4.mp3' },
+      { name: 'my bloody Valentine — When You Sleep',  genre: 'shoegaze',            img: 'top icons/song_icon5.jpg', src: 'songs/song5.mp3' },
+    ];
+
+    const p = JSON.parse(localStorage.getItem('fh_profile') || '{}');
+
+    // Акцентный цвет
+    const idx = Math.min(+p.accentIdx || 0, ACCENTS.length - 1);
+    const c = ACCENTS[idx];
+    document.documentElement.style.setProperty('--primary',      c.primary);
+    document.documentElement.style.setProperty('--primary-soft', c.soft);
+    document.documentElement.style.setProperty('--on-primary',   c.on);
+
+    // Ник
+    if (p.nick) {
+      document.getElementById('profile-nick-text').textContent = p.nick;
+      document.title = p.nick + ' — FandomHub';
+    }
+
+    // Мета: локация
+    if (p.location) {
+      document.getElementById('profile-meta-text').textContent = '📍 ' + p.location + ' · На FandomHub с 2023 года';
+    }
+
+    // О себе
+    if (p.bio) document.getElementById('profile-bio-text').textContent = p.bio;
+
+    // Аватар
+    if (p.avatar) document.getElementById('profile-avatar-img').src = p.avatar;
+
+    // Любимый трек
+    const ti = Math.min(+p.trackIdx || 0, TRACKS.length - 1);
+    const t = TRACKS[ti];
+    document.getElementById('fav-track-cover').src          = t.img;
+    document.getElementById('fav-track-name').textContent   = t.name;
+    document.getElementById('fav-track-genre').textContent  = t.genre;
+    document.getElementById('fav-track-audio').src          = t.src;
+
+    // Любимые фандомы
+    if (Array.isArray(p.fandoms) && p.fandoms.length > 0) {
+      function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      document.getElementById('profile-fandoms-grid').innerHTML = p.fandoms.map(f => `
+        <a href="catalog-${f.cat}.html" class="fandom-pin">
+          <div class="fandom-pin-poster">
+            <img src="${esc(f.img)}" alt="${esc(f.name)}">
+            <span class="fandom-pin-cat" style="background:var(--c-${f.cat})">${esc(f.catLabel)}</span>
+          </div>
+          <span class="fandom-pin-name">${esc(f.name)}</span>
+        </a>
+      `).join('');
+    }
+  })();
+
+  /* ---- Плеер ---- */
+  (function() {
+    var card     = document.querySelector('.music-card');
+    var audio    = card.querySelector('audio');
+    var playBtn  = card.querySelector('.play-btn');
+    var iconPlay = card.querySelector('.icon-play');
+    var iconPause= card.querySelector('.icon-pause');
+    var barInner = card.querySelector('.music-bar-inner');
+    var seekbar  = card.querySelector('.music-seekbar');
+    var timeEl   = card.querySelector('.time-display');
+
+    function fmt(s) {
+      var m = Math.floor(s / 60), sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+    playBtn.addEventListener('click', function() {
+      if (audio.paused) {
+        audio.play();
+        iconPlay.style.display  = 'none';
+        iconPause.style.display = '';
+      } else {
+        audio.pause();
+        iconPlay.style.display  = '';
+        iconPause.style.display = 'none';
+      }
+    });
+    audio.addEventListener('timeupdate', function() {
+      if (audio.duration) {
+        barInner.style.width = (audio.currentTime / audio.duration * 100) + '%';
+        timeEl.textContent   = fmt(audio.currentTime);
+      }
+    });
+    audio.addEventListener('ended', function() {
+      iconPlay.style.display  = '';
+      iconPause.style.display = 'none';
+      barInner.style.width    = '0%';
+      timeEl.textContent      = '0:00';
+    });
+    seekbar.addEventListener('click', function(e) {
+      if (!audio.duration) return;
+      var rect = seekbar.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    });
+    audio.addEventListener('loadedmetadata', function() {
+      timeEl.textContent = fmt(audio.duration);
+    });
+  })();
+
+  /* ---- Добавление комментария ---- */
+  function addComment() {
+    var input = document.getElementById('comment-input');
+    var text  = input.value.trim();
+    if (!text) return;
+    var nick  = document.getElementById('profile-nick-text').textContent.trim();
+    var list  = document.getElementById('comments-list');
+    var div   = document.createElement('div');
+    div.className = 'comment';
+    div.innerHTML =
+      '<div class="avatar" style="width:40px;height:40px;flex-shrink:0"><img class="avatar-overlay" src="pfp.jpg" alt=""></div>' +
+      '<div class="comment-body">' +
+        '<div class="comment-header">' +
+          '<span class="comment-author">' + nick.replace(/</g,'&lt;') + '</span>' +
+          '<span class="comment-time">только что</span>' +
+        '</div>' +
+        '<p class="comment-text">' + text.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</p>' +
+      '</div>';
+    list.prepend(div);
+    input.value = '';
+  }
+
+  document.getElementById('comment-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') addComment();
+  });
+
+  /* ---- Обложки любимых фандомов — загрузка из API ---- */
+  (function () {
+    const RAWG_KEY = 'cc2db0f41f074256bb976f07cb70a78b';
+    const TMDB_KEY = '1af27180c055a2bfd3ba2109a04c1843';
+
+    function setImg(id, src) {
+      var el = document.getElementById(id);
+      if (el) el.src = src;
+    }
+
+    // Аниме — Jikan (Фрирен MAL=52991, Steins;Gate MAL=9253, Evangelion MAL=30)
+    [['pin-frieren', 52991], ['pin-steins', 9253], ['pin-eva', 30]].forEach(function([id, malId]) {
+      fetch('https://api.jikan.moe/v4/anime/' + malId)
+        .then(function(r) { return r.json(); })
+        .then(function(d) { setImg(id, d.data && d.data.images && d.data.images.jpg && d.data.images.jpg.large_image_url || ''); })
+        .catch(function() {});
+    });
+
+    // Фильм — TMDB (La Haine 1995, ID=406)
+    fetch('https://api.themoviedb.org/3/movie/406?api_key=' + TMDB_KEY)
+      .then(function(r) { return r.json(); })
+      .then(function(d) { if (d.poster_path) setImg('pin-lahaine', 'https://image.tmdb.org/t/p/w342' + d.poster_path); })
+      .catch(function() {});
+
+    // Игры — RAWG (hollow-knight, elden-ring)
+    [['pin-hk', 'hollow-knight'], ['pin-er', 'elden-ring']].forEach(function([id, slug]) {
+      fetch('https://api.rawg.io/api/games/' + slug + '?key=' + RAWG_KEY)
+        .then(function(r) { return r.json(); })
+        .then(function(d) { setImg(id, d.background_image || ''); })
+        .catch(function() {});
+    });
+  })();
+</script>
+</body>
+</html>

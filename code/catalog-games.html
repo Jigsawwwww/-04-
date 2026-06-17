@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Игры — FandomHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="cat-games">
+
+<header class="header">
+  <a href="index.html" class="brand"><span>Fandom<b>Hub</b></span></a>
+  <a href="index.html" class="back-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    Главная
+  </a>
+</header>
+
+<main class="page">
+  <div class="cat-head">
+    <div>
+      <span class="cat-label"><span class="cat-dot"></span>Игры</span>
+      <h1>Каталог фандомов</h1>
+      <p>Популярные игры с RAWG · поиск в реальном времени</p>
+    </div>
+    <a href="index.html" class="back-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      На главную
+    </a>
+  </div>
+
+  <div class="search-wrap">
+    <img src="icons/icon-search.svg" alt="">
+    <input type="text" id="search" placeholder="Поиск игры…" autocomplete="off">
+  </div>
+
+  <div class="cards-grid" id="grid">`n  </div>`n  <p class="no-results" id="no-results">Ничего не найдено</p>
+</main>
+
+<script>
+  // API-ключ RAWG — получен на rawg.io
+  const RAWG_KEY = 'cc2db0f41f074256bb976f07cb70a78b';
+  // Базовый URL RAWG API
+  const RAWG     = 'https://api.rawg.io/api';
+
+  const grid  = document.getElementById('grid');       // сетка карточек
+  const noRes = document.getElementById('no-results'); // надпись «ничего не найдено»
+  const inp   = document.getElementById('search');     // поле поиска
+  let searchTimer;
+
+  // Форматирует большое число: 1 200 000 → "1.2M", 98 000 → "98K"
+  function fmt(n) {
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+    if (n >= 1_000)     return Math.round(n / 1_000) + 'K';
+    return n;
+  }
+
+  // Экранирует спецсимволы HTML, чтобы данные из API не сломали вёрстку
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Отрисовывает карточки в сетке по массиву объектов из RAWG.
+  // Если массив пустой — показывает «ничего не найдено».
+  function renderCards(items) {
+    noRes.style.display = 'none';
+    if (!items.length) { grid.innerHTML = ''; noRes.style.display = ''; return; }
+    grid.innerHTML = items.map(g => {
+      const title  = esc(g.name);
+      // background_image — скриншот/арт игры (горизонтальный, обрезается до 2:3 через object-fit)
+      const image  = g.background_image || '';
+      const genres = (g.genres || []).slice(0, 2).map(x => x.name).join(' · ') || '—';
+      // rating — средняя оценка пользователей RAWG (шкала 0–5)
+      const score  = g.rating ? '★ ' + (g.rating * 2).toFixed(1) : '';
+      const votes  = fmt(g.ratings_count || 0);
+      // Прямая ссылка на страницу игры на RAWG
+      const url    = `https://rawg.io/games/${g.slug}`;
+      return `
+        <a href="${url}" target="_blank" rel="noopener" class="fandom-card">
+          <div class="card-poster"><img src="${image}" alt="${title}" loading="lazy"></div>
+          <div class="card-body">
+            <div class="card-name" title="${title}">${title}</div>
+            <div class="card-genre">${esc(genres)}</div>
+            <div class="card-footer">
+              <span class="card-members">${votes} оценок</span>
+              <span class="join-btn">${score}</span>
+            </div>
+          </div>
+        </a>`;
+    }).join('');
+  }
+
+  // Показывает CSS-спиннер пока идёт загрузка
+  function showSpinner() {
+    grid.innerHTML = '<div class="grid-spinner"></div>';
+    noRes.style.display = 'none';
+  }
+
+  // Загружает данные из RAWG.
+  // Без запроса — топ игр по рейтингу; с запросом — поиск по названию.
+  async function load(query) {
+    showSpinner();
+    try {
+      const url = query
+        ? `${RAWG}/games?key=${RAWG_KEY}&search=${encodeURIComponent(query)}&page_size=24`
+        : `${RAWG}/games?key=${RAWG_KEY}&ordering=-added&page_size=24`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+      renderCards((await res.json()).results || []);
+    } catch {
+      grid.innerHTML = '<p class="grid-message">Не удалось загрузить данные. Попробуй позже.</p>';
+    }
+  }
+
+  // Дебаунс 500 мс: запрос уходит только после паузы в наборе текста
+  inp.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => load(this.value.trim()), 500);
+  });
+
+  // Загружаем топ игр при открытии страницы
+  load();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Войти — FandomHub</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="auth">
+
+<header class="header">
+  <a href="index.html" class="brand">
+    <span>Fandom<b>Hub</b></span>
+  </a>
+</header>
+
+<main class="page">
+  <div class="card">
+    <div class="card-icon">
+      <img src="icons/icon-login-card.svg" alt="">
+    </div>
+    <h1>Добро пожаловать</h1>
+    <p class="subtitle">Войди, чтобы продолжить в FandomHub</p>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="login-email">Почта или ник</label>
+        <input type="text" id="login-email" placeholder="user@example.com" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <div class="field-row">
+          <label for="login-pass">Пароль</label>
+          <a href="#" class="forgot">Забыли пароль?</a>
+        </div>
+        <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+
+      <button class="btn-submit">
+        Войти
+        <img src="icons/icon-arrow-right.svg" alt="">
+      </button>
+    </form>
+
+    <div class="divider">или</div>
+
+    <p class="switch-link">
+      Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+    </p>
+  </div>
+</main>
+
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('login-email').value.trim();
+    var pass  = document.getElementById('login-pass').value;
+    if (!email || !pass) return;
+    localStorage.setItem('fh_logged_in', '1');
+    window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>

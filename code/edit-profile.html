@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Редактирование профиля — FandomHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="brand"><span>Fandom<b>Hub</b></span></a>
+  <a href="profile.html" class="back-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    Назад в профиль
+  </a>
+</header>
+
+<main class="edit-page">
+
+  <div>
+    <h1 style="font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px">Редактирование профиля</h1>
+    <p style="color:var(--text-soft);font-size:14.5px">Настрой свой профиль под себя</p>
+  </div>
+
+  <!-- ── Секция 1: Основное ── -->
+  <div class="edit-section">
+    <div class="es-title">
+      Основное
+    </div>
+
+    <div class="avatar-row">
+      <img id="ep-avatar" class="ep-avatar-img" src="pfp.jpg" alt="Аватар">
+      <div class="avatar-actions">
+        <label class="avatar-upload-label" for="ep-avatar-file">
+          Загрузить фото
+        </label>
+        <input type="file" id="ep-avatar-file" accept="image/*" style="display:none">
+        <span class="avatar-hint">JPG, PNG · до 5 МБ</span>
+        <button class="btn-danger" id="ep-avatar-remove">✕ Удалить фото</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Ник</label>
+      <input type="text" id="ep-nick" placeholder="Твой ник на сайте" maxlength="32">
+    </div>
+    <div class="field">
+      <label>Локация <span style="font-weight:400;color:var(--text-faint)">(необязательно)</span></label>
+      <input type="text" id="ep-location" placeholder="Город или страна" maxlength="60">
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <label>О себе</label>
+      <textarea id="ep-bio" rows="4" placeholder="Расскажи о себе…" maxlength="400"></textarea>
+      <div class="hint">Не более 400 символов</div>
+    </div>
+  </div>
+
+  <!-- ── Секция 2: Внешний вид ── -->
+  <div class="edit-section">
+    <div class="es-title">
+      Внешний вид
+    </div>
+    <p style="font-size:13.5px;color:var(--text-soft);margin-bottom:16px">Выбери акцентный цвет профиля — он применится к кнопкам, рамке аватара и выделениям</p>
+    <div class="swatches" id="ep-swatches"></div>
+    <div class="swatch-label" id="ep-swatch-name"></div>
+  </div>
+
+  <!-- ── Секция 3: Любимые фандомы ── -->
+  <div class="edit-section">
+    <div class="es-title">
+      Любимые фандомы
+    </div>
+
+    <div class="fandom-limit" id="ep-limit-note">Выбрано: 0 / 6</div>
+    <div class="selected-chips" id="ep-chips">
+      <span class="selected-empty">Ничего не выбрано — ищи ниже</span>
+    </div>
+
+    <div class="fandom-cat-tabs" id="ep-cat-tabs">
+      <button class="fandom-cat-tab active" data-cat="anime" style="background:var(--c-anime-soft)">
+        <span class="fandom-cat-dot" style="background:var(--c-anime)"></span>Аниме
+      </button>
+      <button class="fandom-cat-tab" data-cat="films">
+        <span class="fandom-cat-dot" style="background:var(--c-films)"></span>Фильмы
+      </button>
+      <button class="fandom-cat-tab" data-cat="games">
+        <span class="fandom-cat-dot" style="background:var(--c-games)"></span>Игры
+      </button>
+      <button class="fandom-cat-tab" data-cat="books">
+        <span class="fandom-cat-dot" style="background:var(--c-books)"></span>Книги
+      </button>
+    </div>
+
+    <input type="text" class="fandom-search" id="ep-fandom-q" placeholder="Поиск…" autocomplete="off">
+    <div class="results-grid" id="ep-results">
+      <div class="results-spinner"></div>
+    </div>
+  </div>
+
+  <!-- ── Секция 4: Любимый трек ── -->
+  <div class="edit-section">
+    <div class="es-title">
+      Любимый трек
+    </div>
+    <div class="track-opts" id="ep-tracks"></div>
+  </div>
+
+</main>
+
+<div class="save-bar">
+  <button class="save-bar-btn" id="ep-save">✓ Сохранить изменения</button>
+</div>
+<div class="save-toast" id="ep-toast">✓ Профиль сохранён</div>
+
+<script>
+// ─── Константы ───────────────────────────────────────────────────────────────
+
+// Доступные цветовые акценты профиля.
+// primary  — основной цвет (кнопки, рамки, подсветка).
+// soft     — приглушённый фон на тёмной теме (бейджи, чипсы).
+// on       — цвет текста поверх primary (должен хорошо читаться).
+const ACCENTS = [
+  { name: 'Фиолетовый',   primary: '#A5B4FC', soft: '#1E2260', on: '#12154E' },
+  { name: 'Розовый',      primary: '#F9A8D4', soft: '#42103A', on: '#3A0828' },
+  { name: 'Голубой',      primary: '#7DD3FC', soft: '#0A2040', on: '#061830' },
+  { name: 'Зелёный',      primary: '#86EFAC', soft: '#0B2618', on: '#04200E' },
+  { name: 'Оранжевый',    primary: '#FCA05A', soft: '#38200A', on: '#2A1200' },
+  { name: 'Коралловый',   primary: '#F4A09A', soft: '#38100E', on: '#2A0806' },
+  { name: 'Бирюзовый',    primary: '#5EEAD4', soft: '#04281E', on: '#011610' },
+  { name: 'Золотой',      primary: '#FCD34D', soft: '#352400', on: '#281800' },
+];
+
+// Список треков, из которых пользователь выбирает «любимый».
+// img — путь к обложке, src — путь к аудиофайлу.
+const TRACKS = [
+  { name: 'King Crimson — Starless',               meta: 'прог-рок · арт-рок',  img: 'top icons/song_icon1.jpg', src: 'songs/song1.mp3' },
+  { name: 'David Bowie — Heroes',                  meta: 'глэм-рок · new wave', img: 'top icons/song_icon2.jpg', src: 'songs/song2.mp3' },
+  { name: 'Ichiko Aoba — Luciferine',              meta: 'dream pop · ambient', img: 'top icons/song_icon3.jpg', src: 'songs/song3.mp3' },
+  { name: 'Michael Jackson — Billie Jean',         meta: 'поп · R&B',           img: 'top icons/song_icon4.jpg', src: 'songs/song4.mp3' },
+  { name: 'my bloody Valentine — When You Sleep',  meta: 'shoegaze',            img: 'top icons/song_icon5.jpg', src: 'songs/song5.mp3' },
+];
+
+// CSS-переменные фона активной вкладки для каждой категории фандомов.
+const CAT_SOFT = { anime: 'var(--c-anime-soft)', films: 'var(--c-films-soft)', games: 'var(--c-games-soft)', books: 'var(--c-books-soft)' };
+
+// API-ключи для внешних сервисов.
+const RAWG_KEY = 'cc2db0f41f074256bb976f07cb70a78b'; // rawg.io  — база игр
+const TMDB_KEY = '1af27180c055a2bfd3ba2109a04c1843'; // themoviedb.org — база фильмов
+
+// ─── Состояние ───────────────────────────────────────────────────────────────
+
+// Единый объект, хранящий все редактируемые данные профиля в памяти.
+// При сохранении он целиком записывается в localStorage.
+let state = {
+  nick: '',       // никнейм пользователя
+  bio: '',        // текст «О себе»
+  location: '',   // город / страна (необязательно)
+  avatar: '',     // base64-строка загруженного фото или '' для дефолтного
+  accentIdx: 0,   // индекс выбранного цвета в массиве ACCENTS
+  fandoms: [],    // массив выбранных фандомов (максимум 6)
+  trackIdx: 0,    // индекс выбранного трека в массиве TRACKS
+};
+
+// ─── Инициализация ───────────────────────────────────────────────────────────
+
+// Самовызывающаяся функция — запускается сразу при загрузке страницы.
+// Читает сохранённый профиль и заполняет все элементы страницы.
+(function init() {
+  // Пробуем прочитать профиль из localStorage.
+  // Если его ещё нет, используем пустой объект {}.
+  const saved = JSON.parse(localStorage.getItem('fh_profile') || '{}');
+
+  // Перезаписываем поля state данными из localStorage
+  // (Object.assign копирует свойства из saved в state).
+  Object.assign(state, saved);
+
+  // Защита от некорректных индексов: если значение вышло за пределы
+  // массива (например, файл был изменён вручную), сбрасываем на 0.
+  state.accentIdx = Math.min(+state.accentIdx || 0, ACCENTS.length - 1);
+  state.trackIdx  = Math.min(+state.trackIdx  || 0, TRACKS.length  - 1);
+
+  // Если fandoms по какой-то причине не массив — заменяем на пустой.
+  if (!Array.isArray(state.fandoms)) state.fandoms = [];
+
+  // Применяем акцентный цвет до отрисовки, чтобы страница сразу
+  // открылась с нужными цветами без «мигания».
+  applyAccent(state.accentIdx);
+
+  // Заполняем текстовые поля формы.
+  fillForm();
+
+  // Рисуем все интерактивные блоки.
+  renderSwatches(); // цветовые кружки
+  renderTracks();   // список треков
+  renderChips();    // выбранные фандомы
+  loadResults('');  // начальные результаты поиска фандомов (без запроса — топ)
+})();
+
+// Заполняет поля формы значениями из state.
+// Проверяем наличие значения перед присвоением, чтобы
+// не затирать placeholder пустой строкой.
+function fillForm() {
+  if (state.nick)     document.getElementById('ep-nick').value     = state.nick;
+  if (state.bio)      document.getElementById('ep-bio').value      = state.bio;
+  if (state.location) document.getElementById('ep-location').value = state.location;
+  if (state.avatar)   document.getElementById('ep-avatar').src     = state.avatar;
+}
+
+// ─── Акцентный цвет ──────────────────────────────────────────────────────────
+
+// Применяет выбранный цветовой акцент к CSS-переменным на уровне <html>.
+// Именно через эти переменные style.css красит кнопки, рамки и т. д.
+function applyAccent(idx) {
+  const c = ACCENTS[idx];
+  document.documentElement.style.setProperty('--primary',      c.primary);
+  document.documentElement.style.setProperty('--primary-soft', c.soft);
+  document.documentElement.style.setProperty('--on-primary',   c.on);
+}
+
+// Перерисовывает ряд цветных кружков-свотчей.
+// Активному кружку добавляется класс 'active' (галочка через CSS).
+function renderSwatches() {
+  document.getElementById('ep-swatches').innerHTML = ACCENTS.map((a, i) => `
+    <button class="swatch${i === state.accentIdx ? ' active' : ''}"
+      style="background:${a.primary}" title="${a.name}" data-idx="${i}"></button>
+  `).join('');
+
+  // Подпись под кружками — название текущего цвета.
+  document.getElementById('ep-swatch-name').textContent = ACCENTS[state.accentIdx].name;
+}
+
+// Обработчик клика по контейнеру кружков.
+// Используем делегирование: слушаем клик на родителе,
+// а потом ищем ближайший .swatch среди кликнутых элементов.
+document.getElementById('ep-swatches').addEventListener('click', function(e) {
+  const btn = e.target.closest('.swatch');
+  if (!btn) return; // клик пришёлся мимо кружка — игнорируем
+
+  state.accentIdx = +btn.dataset.idx; // + преобразует строку в число
+  applyAccent(state.accentIdx);
+  renderSwatches(); // перерисовываем, чтобы сдвинуть галочку
+});
+
+// ─── Аватар ──────────────────────────────────────────────────────────────────
+
+// Срабатывает, когда пользователь выбирает файл через диалог.
+document.getElementById('ep-avatar-file').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+
+  // Проверяем размер: 5 МБ = 5 * 1024 * 1024 байт.
+  if (file.size > 5 * 1024 * 1024) { alert('Файл слишком большой (макс. 5 МБ)'); return; }
+
+  // FileReader читает файл и превращает его в строку base64 (Data URL).
+  // Это позволяет хранить изображение прямо в localStorage без сервера.
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.avatar = e.target.result;                    // сохраняем base64 в state
+    document.getElementById('ep-avatar').src = state.avatar; // обновляем превью
+  };
+  reader.readAsDataURL(file);
+});
+
+// Удаляет загруженный аватар: возвращает дефолтную фотографию pfp.jpg
+// и очищает поле input, чтобы можно было загрузить тот же файл снова.
+document.getElementById('ep-avatar-remove').addEventListener('click', () => {
+  state.avatar = '';
+  document.getElementById('ep-avatar').src = 'pfp.jpg';
+  document.getElementById('ep-avatar-file').value = '';
+});
+
+// ─── Треки ───────────────────────────────────────────────────────────────────
+
+// Рисует список треков в виде кликабельных карточек.
+// Выбранный трек получает класс 'sel' и визуально выделяется.
+function renderTracks() {
+  const wrap = document.getElementById('ep-tracks');
+  wrap.innerHTML = TRACKS.map((t, i) => `
+    <div class="track-opt${i === state.trackIdx ? ' sel' : ''}" data-idx="${i}">
+      <img src="${t.img}" alt="">
+      <div class="track-opt-info">
+        <div class="track-opt-name">${esc(t.name)}</div>
+        <div class="track-opt-meta">${esc(t.meta)}</div>
+      </div>
+      <div class="radio-dot"></div>
+    </div>
+  `).join('');
+
+  // Навешиваем обработчики на каждую карточку трека после отрисовки.
+  wrap.querySelectorAll('.track-opt').forEach(el =>
+    el.addEventListener('click', function() {
+      state.trackIdx = +this.dataset.idx;
+      renderTracks(); // перерисовываем, чтобы перенести выделение
+    })
+  );
+}
+
+// ─── Поиск фандомов ──────────────────────────────────────────────────────────
+
+let curCat = 'anime';   // текущая активная категория поиска
+let curResults = [];    // последний полученный список результатов
+let searchTimer;        // таймер дебаунса (откладывает запрос при печати)
+
+// Экранирует спецсимволы HTML, чтобы данные из API
+// не сломали вёрстку и не создали XSS-уязвимость.
+// Пример: <script> превратится в &lt;script&gt; и покажется как текст.
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Переключение категорий (Аниме / Фильмы / Игры / Книги).
+document.getElementById('ep-cat-tabs').addEventListener('click', function(e) {
+  const btn = e.target.closest('.fandom-cat-tab');
+  if (!btn) return;
+
+  curCat = btn.dataset.cat;
+
+  // Снимаем активное состояние со всех вкладок, потом ставим на нажатую.
+  document.querySelectorAll('.fandom-cat-tab').forEach(t => { t.classList.remove('active'); t.style.background = ''; });
+  btn.classList.add('active');
+  btn.style.background = CAT_SOFT[curCat]; // подсвечиваем цветом категории
+
+  // Сбрасываем строку поиска и загружаем топ новой категории.
+  document.getElementById('ep-fandom-q').value = '';
+  loadResults('');
+});
+
+// Поиск по вводу: дебаунс 420 мс.
+// Запрос к API уходит только когда пользователь перестал печатать,
+// чтобы не слать запрос на каждую нажатую букву.
+document.getElementById('ep-fandom-q').addEventListener('input', function() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => loadResults(this.value.trim()), 420);
+});
+
+// Загружает список фандомов из соответствующего API.
+// query — строка поиска; если пустая, загружается топ.
+async function loadResults(query) {
+  // Показываем спиннер, пока идёт загрузка.
+  document.getElementById('ep-results').innerHTML = '<div class="results-spinner"></div>';
+
+  try {
+    let items = []; // сюда соберём нормализованные объекты фандомов
+
+    if (curCat === 'anime') {
+      // Jikan — бесплатный API MyAnimeList, ключ не нужен.
+      // При поиске: /anime?q=... При топе: /top/anime?type=tv
+      const url = query
+        ? `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=18&sfw=true&order_by=popularity`
+        : `https://api.jikan.moe/v4/top/anime?type=tv&limit=18`;
+      const data = (await (await fetch(url)).json()).data || [];
+
+      // Нормализуем: приводим разные форматы API к единому виду объекта.
+      items = data.map(a => ({
+        id: 'anime-' + a.mal_id,                  // уникальный ID с префиксом категории
+        name: a.title_english || a.title,          // английское название, иначе оригинал
+        img: a.images?.jpg?.large_image_url || a.images?.jpg?.image_url || '',
+        url: a.url || '#', cat: 'anime', catLabel: 'Аниме',
+      }));
+
+    } else if (curCat === 'films') {
+      // TMDB — база фильмов. Результаты лежат в поле results.
+      const url = query
+        ? `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&language=ru-RU&query=${encodeURIComponent(query)}`
+        : `https://api.themoviedb.org/3/movie/top_rated?api_key=${TMDB_KEY}&language=ru-RU`;
+      const data = (await (await fetch(url)).json()).results || [];
+
+      items = data.slice(0, 18).map(m => ({
+        id: 'films-' + m.id,
+        name: m.title || m.original_title,
+        // poster_path — относительный путь; w185 — ширина постера в пикселях.
+        img: m.poster_path ? 'https://image.tmdb.org/t/p/w185' + m.poster_path : '',
+        url: 'https://www.themoviedb.org/movie/' + m.id, cat: 'films', catLabel: 'Фильмы',
+      }));
+
+    } else if (curCat === 'games') {
+      // RAWG — база игр. background_image — скриншот/обложка игры.
+      const url = query
+        ? `https://api.rawg.io/api/games?key=${RAWG_KEY}&search=${encodeURIComponent(query)}&page_size=18`
+        : `https://api.rawg.io/api/games?key=${RAWG_KEY}&ordering=-added&page_size=18`;
+      const data = (await (await fetch(url)).json()).results || [];
+
+      items = data.map(g => ({
+        id: 'games-' + g.id,
+        name: g.name,
+        img: g.background_image || '',
+        url: 'https://rawg.io/games/' + g.slug, cat: 'games', catLabel: 'Игры',
+      }));
+
+    } else if (curCat === 'books') {
+      // Open Library — бесплатная база книг, ключ не нужен.
+      // fields= ограничивает ответ только нужными полями (быстрее грузится).
+      const fields = 'key,title,author_name,cover_i';
+      const url = query
+        ? `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=18&fields=${fields}`
+        : `https://openlibrary.org/search.json?subject=fiction&sort=rating&limit=24&fields=${fields}`;
+      const docs = (await (await fetch(url)).json()).docs || [];
+
+      // Оставляем только книги с обложкой (cover_i — числовой ID обложки).
+      items = docs.filter(b => b.cover_i).slice(0, 18).map(b => ({
+        id: 'books-' + b.key.replace('/works/', ''),
+        name: b.title,
+        // -M.jpg — средний размер обложки (~180px), достаточно для карточки.
+        img: `https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`,
+        url: 'https://openlibrary.org' + b.key, cat: 'books', catLabel: 'Книги',
+      }));
+    }
+
+    curResults = items; // запоминаем для использования в renderResults
+    renderResults();
+
+  } catch {
+    // Если запрос упал (нет интернета, ошибка API) — показываем сообщение.
+    document.getElementById('ep-results').innerHTML = '<div class="results-msg">Не удалось загрузить. Попробуй позже.</div>';
+  }
+}
+
+// Проверяет, есть ли фандом с таким id среди уже выбранных.
+function isSelected(id) { return state.fandoms.some(f => f.id === id); }
+
+// Рисует сетку карточек-результатов поиска.
+// Уже выбранные карточки помечаются классом 'sel'.
+function renderResults() {
+  const grid = document.getElementById('ep-results');
+
+  if (!curResults.length) {
+    grid.innerHTML = '<div class="results-msg">Ничего не найдено</div>';
+    return;
+  }
+
+  grid.innerHTML = curResults.map(r => `
+    <div class="result-card${isSelected(r.id) ? ' sel' : ''}" data-id="${esc(r.id)}">
+      <img src="${esc(r.img)}" alt="${esc(r.name)}" loading="lazy">
+      <div class="result-card-body">
+        <div class="result-card-name" title="${esc(r.name)}">${esc(r.name)}</div>
+        <div class="result-card-cat">${esc(r.catLabel)}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Навешиваем обработчики клика на каждую карточку результата.
+  grid.querySelectorAll('.result-card').forEach(card =>
+    card.addEventListener('click', function() {
+      const id = this.dataset.id;
+
+      if (isSelected(id)) {
+        // Фандом уже выбран — убираем его из списка.
+        state.fandoms = state.fandoms.filter(f => f.id !== id);
+      } else {
+        // Нельзя выбрать больше 6 фандомов.
+        if (state.fandoms.length >= 6) return;
+
+        // Находим полный объект фандома в curResults и добавляем в state.
+        const item = curResults.find(r => r.id === id);
+        if (item) state.fandoms.push(item);
+      }
+
+      // Обновляем все зависимые блоки интерфейса.
+      renderChips();   // чипсы выбранных фандомов вверху секции
+      renderResults(); // карточки (чтобы перекрасить выбранные)
+      updateLimit();   // счётчик «Выбрано: X / 6»
+    })
+  );
+}
+
+// Рисует ряд чипсов с уже выбранными фандомами над поиском.
+// Каждый чипс содержит миниатюру, название и кнопку удаления ✕.
+function renderChips() {
+  const wrap = document.getElementById('ep-chips');
+
+  if (!state.fandoms.length) {
+    wrap.innerHTML = '<span class="selected-empty">Ничего не выбрано — ищи ниже</span>';
+    return;
+  }
+
+  wrap.innerHTML = state.fandoms.map(f => `
+    <div class="chip-sel" data-id="${esc(f.id)}">
+      <img src="${esc(f.img)}" alt="">
+      <span>${esc(f.name)}</span>
+      <button class="chip-del" title="Удалить">✕</button>
+    </div>
+  `).join('');
+
+  // Обработчик кнопки ✕ на каждом чипсе.
+  wrap.querySelectorAll('.chip-del').forEach(btn =>
+    btn.addEventListener('click', function() {
+      // closest() ищет ближайшего родителя с нужным классом —
+      // это сам чипс, на котором хранится data-id.
+      const id = this.closest('.chip-sel').dataset.id;
+      state.fandoms = state.fandoms.filter(f => f.id !== id);
+      renderChips();
+      renderResults();
+      updateLimit();
+    })
+  );
+}
+
+// Обновляет текст счётчика над чипсами: «Выбрано: 3 / 6».
+function updateLimit() {
+  document.getElementById('ep-limit-note').textContent = `Выбрано: ${state.fandoms.length} / 6`;
+}
+
+// ─── Сохранение ──────────────────────────────────────────────────────────────
+
+document.getElementById('ep-save').addEventListener('click', function() {
+  // Читаем актуальные значения текстовых полей прямо перед сохранением,
+  // чтобы не зависеть от того, когда пользователь перестал печатать.
+  state.nick     = document.getElementById('ep-nick').value.trim();
+  state.bio      = document.getElementById('ep-bio').value.trim();
+  state.location = document.getElementById('ep-location').value.trim();
+
+  // Записываем весь объект state в localStorage как JSON-строку.
+  // profile.html прочитает эти данные при следующем открытии.
+  localStorage.setItem('fh_profile', JSON.stringify(state));
+
+  // Показываем тост «Профиль сохранён» на 1.2 секунды,
+  // затем переходим обратно на страницу профиля.
+  const toast = document.getElementById('ep-toast');
+  toast.classList.add('show');
+  setTimeout(() => { toast.classList.remove('show'); window.location.href = 'profile.html'; }, 1200);
+});
+</script>
+</body>
+</html>
